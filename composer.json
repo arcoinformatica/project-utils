@@ -14,5 +14,6 @@
         "psr-4": {
             "arcoinformatica\\utils\\": "src/"
         }
-    }
+    },
+    "minimum-stability": "stable"
 }
