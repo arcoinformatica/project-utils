@@ -1,0 +1,18 @@
+{
+    "name": "arcowebsites/project-utils",
+    "description": "Utilitários para desenvolvimento",
+    "version": "1.0.0",
+    "type": "library",
+    "config": {
+        "vendor-dir": "src/vendor"
+    },
+    "require": {
+        "php": "^7.2",
+        "netresearch/jsonmapper": "^1.6"
+    },
+    "autoload": {
+        "psr-4": {
+            "arcoinformatica\\utils\\": "src/"
+        }
+    }
+}
