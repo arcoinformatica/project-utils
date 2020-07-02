@@ -1,8 +1,7 @@
 {
     "name": "arcowebsites/project-utils",
-    "description": "Utilitários para desenvolvimento",
-    "version": "1.0.0",
     "type": "library",
+    "description": "Utilitários para desenvolvimento",
     "config": {
         "vendor-dir": "src/vendor"
     },
