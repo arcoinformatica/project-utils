@@ -5,18 +5,13 @@
     "config": {
         "vendor-dir": "src/vendor"
     },
+    "autoload": {
+        "psr-4": {
+            "arcowebsites\\utils\\": "src/"
+        }
+    },
     "require": {
         "php": "^7.2",
         "netresearch/jsonmapper": "^1.6"
-    },
-    "autoload": {
-        "psr-4": {
-            "arcoinformatica\\utils\\": "src/"
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0-dev"
-        }
     }
 }
