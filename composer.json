@@ -5,13 +5,21 @@
     "config": {
         "vendor-dir": "src/vendor"
     },
+    "require": {
+        "php": "^7.2",
+        "netresearch/jsonmapper": "^1.6"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.0"
+    },
     "autoload": {
         "psr-4": {
             "arcowebsites\\utils\\": "src/"
         }
     },
-    "require": {
-        "php": "^7.2",
-        "netresearch/jsonmapper": "^1.6"
+    "autoload-dev": {
+        "psr-4": {
+            "arcowebsites\\utils\\tests\\": "tests/"
+        }
     }
 }
