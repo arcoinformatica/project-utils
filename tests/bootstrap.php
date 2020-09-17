@@ -10,6 +10,6 @@
  * @author fernando
  */
 // TODO: check include path
-//ini_set('include_path', ini_get('include_path'));
+require_once __DIR__ . '/../src/vendor/autoload.php';
 
 // put your code here

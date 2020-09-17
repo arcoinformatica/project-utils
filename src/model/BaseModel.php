@@ -22,19 +22,17 @@ abstract class BaseModel implements JsonSerializable {
      * para um objeto tipado ou uma lista de objetos tipados.
      * 
      * @param array|object $data objecto ou array de objetos a serem parseados
-     * @param bool $strict_bool ativa o parse de uma string "false" ou
-     * "true" para bool (Ex.: $_POST com $_POST['property'] == "false").
      * @return object|array objeto tipado ou lista de objetos tipados
      */
-    public static function parse($data, bool $strict_bool = false) {
+    public static function parse($data) {
         $reflection = new ReflectionClass(get_called_class());
 
         if (is_array($data)) {
             foreach ($data as $key => $value) {
-                $data[$key] = self::filter($value, $reflection, $strict_bool);
+                $data[$key] = self::filter($value, $reflection);
             }
         } else {
-            $data = self::filter($data, $reflection, $strict_bool);
+            $data = self::filter($data, $reflection);
         }
 
         $mapper = new JsonMapper();
@@ -52,13 +50,14 @@ abstract class BaseModel implements JsonSerializable {
     /**
      * Analisa o objeto antes do processo de tipagem, e realiza
      * um tratamento nos valores antes de fazer o parse.
+     * - Strings "false" e "true" para true e false;
+     * - Number "" (string vazia) para null;
      * 
      * @param object $object objeto genérico
      * @param ReflectionClass $reflection
-     * @param bool $strict_bool Converter strings "false" ou "true" para bool?
      * @return object objeto com propriedades filtradas
      */
-    private static function filter(object $object, ReflectionClass $reflection, bool $strict_bool): object {
+    private static function filter(object $object, ReflectionClass $reflection): object {
         foreach ($object as $key => $value) {
             if (!is_null($value)) {
                 /** @var ReflectionProperty $property */
@@ -70,7 +69,7 @@ abstract class BaseModel implements JsonSerializable {
                         $types = explode("|", $type);
 
                         $property->setAccessible(true);
-                        if (in_array($types[0], ["boolean", "bool"]) && $strict_bool) { // Converte strings "false" ou "true" para bool 
+                        if (in_array($types[0], ["boolean", "bool"])) { // Converte strings "false" ou "true" para bool 
                             $property->setValue($object, filter_var($object->{$property->getName()}, FILTER_VALIDATE_BOOLEAN));
                         } else if (in_array($types[0], ["integer", "int", "float", "double"]) && $value === "") { // Converte propriedades numericas com string vazia para null
                             $property->setValue($object, null);
@@ -99,12 +98,12 @@ abstract class BaseModel implements JsonSerializable {
 
                 if (!$has_var_annotation || ($this->removeNullProperties && is_null($rp[$p->getName()]))) {
                     unset($rp[$p->getName()]);
-                } else {
+                } else if (!is_null($rp[$p->getName()])) {
                     list(, $type) = $matches;
                     $types = explode("|", $type);
-                    if (in_array($types[0], ["boolean", "bool", "integer", "int", "float", "double", "string", "array", "object", "null"]) && !is_null($rp[$p->getName()])) {
+                    if (in_array($types[0], ["boolean", "bool", "integer", "int", "float", "double", "string"])) {
                         settype($rp[$p->getName()], $types[0]);
-                    } else if ($types[0] == DateTime::class && !is_null($rp[$p->getName()]) && $rp[$p->getName()] instanceof DateTime) {
+                    } else if ($types[0] == DateTime::class && $rp[$p->getName()] instanceof DateTime) {
                         $rp[$p->getName()] = $rp[$p->getName()]->format(DateTime::ISO8601);
                     }
                 }
