@@ -24,6 +24,12 @@ class ExampleModel extends BaseModel {
      */
     private $property3;
 
+    /**
+     *
+     * @var bool|null 
+     */
+    private $property4;
+
     function getProperty1(): ?string {
         return $this->property1;
     }
@@ -46,6 +52,14 @@ class ExampleModel extends BaseModel {
 
     function setProperty3(?int $property3): void {
         $this->property3 = $property3;
+    }
+
+    function getProperty4(): ?bool {
+        return $this->property4;
+    }
+
+    function setProperty4(?bool $property4): void {
+        $this->property4 = $property4;
     }
 
 }
