@@ -58,26 +58,25 @@ abstract class BaseModel implements JsonSerializable {
      * @return object objeto com propriedades filtradas
      */
     private static function filter(object $object, ReflectionClass $reflection): object {
-        foreach ($object as $key => $value) {
-            if (!is_null($value)) {
-                /** @var ReflectionProperty $property */
-                foreach ($reflection->getProperties() as $property) {
-                    if (!in_array($property->getName(), ['removeNullProperties'])) {
-                        $matches = [];
-                        preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches);
-                        list(, $type) = $matches;
-                        $types = explode("|", $type);
+        /** @var ReflectionProperty $property */
+        foreach ($reflection->getProperties() as $property) {
+            if (!in_array($property->getName(), ['removeNullProperties'])) {
+                $matches = [];
+                preg_match('/@var\s+([^\s]+)/', $property->getDocComment(), $matches);
+                list(, $type) = $matches;
+                $types = explode("|", $type);
 
-                        $property->setAccessible(true);
-                        if (in_array($types[0], ["boolean", "bool"])) { // Converte strings "false" ou "true" para bool (null vira false)
-                            $value = property_exists($object, $property->getName()) ? filter_var($object->{$property->getName()}, FILTER_VALIDATE_BOOLEAN) : false;
-                            $property->setValue($object, $value);
-                        } else if (in_array($types[0], ["integer", "int", "float", "double"]) && $value === "") { // Converte propriedades numericas com string vazia para null
-                            $property->setValue($object, null);
-                        }
-                        $property->setAccessible(false);
-                    }
+                $property->setAccessible(true);
+                if (in_array($types[0], ["boolean", "bool"])) {
+                    // Converte strings "false" ou "true" para bool (null vira false)
+                    $value = property_exists($object, $property->getName()) ? filter_var($object->{$property->getName()}, FILTER_VALIDATE_BOOLEAN) : false;
+                    $property->setValue($object, $value);
+                } else if (in_array($types[0], ["integer", "int", "float", "double"]) &&
+                        property_exists($object, $property->getName()) && $object->{$property->getName()} === "") {
+                    // Converte propriedades numericas com string vazia para null
+                    $property->setValue($object, null);
                 }
+                $property->setAccessible(false);
             }
         }
 
