@@ -1,0 +1,1 @@
+C:37:"PHPUnit\Runner\DefaultTestResultCache":105:{a:2:{s:7:"defects";a:0:{}s:5:"times";a:1:{s:45:"arcowebsites\utils\tests\ParseTest::testParse";d:0.036;}}}

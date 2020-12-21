@@ -10,6 +10,6 @@
  * @author fernando
  */
 // TODO: check include path
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/vendor/autoload.php';
 
 // put your code here
