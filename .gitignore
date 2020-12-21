@@ -3,4 +3,3 @@ vendor/
 src/DS_Store
 /composer.lock
 .history/
-.phpunit.result.cache
